@@ -4,10 +4,12 @@ from dotenv import load_dotenv
 
 class Omie:
     def __init__(self, empresa):
-        
+
         self.AlterarProduto = OmieAlterarProduto(empresa)
         self.ConsultarCliente = OmieConsultarCliente(empresa)
         self.ConsultarPedido = OmieConsultarPedido(empresa)
+        self.ConsultarPedidoEtapas = OmieConsultarPedidoEtapas(empresa)
+        self.ListarEtapasFaturamento = OmieListarEtapasFaturamento(empresa)
         self.ConsultarVendedor = OmieConsultarVendedor(empresa)
         self.ListarCenarios = OmieListarCenarios(empresa)
         self.ListarClientes = OmieListarClientes(empresa)
@@ -26,7 +28,7 @@ class OmieAlterarProduto:
         self.codigo_produto = 0
 
     def executar(self):
-        return OmieApi().executar(self, self.empresa) 
+        return OmieApi().executar(self, self.empresa)
 
 class OmieConsultarCliente:
     def __init__(self, empresa):
@@ -37,7 +39,7 @@ class OmieConsultarCliente:
         self.codigo_cliente_integracao = ""
 
     def executar(self):
-        return OmieApi().executar(self, self.empresa) 
+        return OmieApi().executar(self, self.empresa)
 
 class OmieConsultarPedido:
     def __init__(self, empresa):
@@ -45,6 +47,24 @@ class OmieConsultarPedido:
         self.caminho = "produtos/pedido/"
         self.call = "ConsultarPedido"
         self.codigo_pedido = 0
+
+    def executar(self):
+        return OmieApi().executar(self, self.empresa)
+
+class OmieListarEtapasFaturamento:
+    def __init__(self, empresa):
+        self.empresa = empresa
+        self.caminho = "produtos/etapafat/"
+        self.call = "ListarEtapasFaturamento"
+
+    def executar(self):
+        return OmieApi().executar(self, self.empresa)
+
+class OmieConsultarPedidoEtapas:
+    def __init__(self, empresa):
+        self.empresa = empresa
+        self.caminho = "produtos/pedidoetapas/"
+        self.call = "ListarEtapasPedido"
 
     def executar(self):
         return OmieApi().executar(self, self.empresa)
@@ -58,7 +78,7 @@ class OmieConsultarVendedor:
         self.codInt = ""
 
     def executar(self):
-        return OmieApi().executar(self, self.empresa)  
+        return OmieApi().executar(self, self.empresa)
 
 class OmieListarCenarios:
     def __init__(self, empresa):
@@ -69,7 +89,7 @@ class OmieListarCenarios:
         self.nRegPorPagina = 20
 
     def executar(self):
-        return OmieApi().executar(self, self.empresa) 
+        return OmieApi().executar(self, self.empresa)
 
 class OmieListarClientes:
     def __init__(self, empresa):
@@ -80,7 +100,7 @@ class OmieListarClientes:
         self.registros_por_pagina = 50
 
     def executar(self):
-        return OmieApi().executar(self, self.empresa) 
+        return OmieApi().executar(self, self.empresa)
 
     def todos(self):
         nome_lista_omie = "clientes_cadastro"
@@ -101,7 +121,7 @@ class OmieListarImpostosCenario:
         self.caminho = "geral/cenarios/"
         self.call = 'ListarImpostosCenario'
         self.consumo_final = "N"
-        self.codigo_produto = 0       
+        self.codigo_produto = 0
 
     def executar(self):
         self.codigo_cliente_omie = OmieApi(self.empresa).cliente_imposto()
@@ -117,7 +137,7 @@ class OmieListarLocaisEstoque:
         self.nRegPorPagina = 20
 
     def executar(self):
-        return OmieApi().executar(self, self.empresa) 
+        return OmieApi().executar(self, self.empresa)
 
 class OmieListarPosEstoque:
     def __init__(self, empresa):
@@ -131,7 +151,7 @@ class OmieListarPosEstoque:
         self.codigo_local_estoque = OmieApi(empresa).local_de_estoque()
 
     def executar(self):
-        return OmieApi().executar(self, self.empresa) 
+        return OmieApi().executar(self, self.empresa)
 
     def todos(self):
         nome_lista_omie = "produtos"
@@ -183,7 +203,7 @@ class OmieListarTabelaItens:
         self.cCodIntTabPreco = ""
 
     def executar(self):
-        return OmieApi().executar(self, self.empresa) 
+        return OmieApi().executar(self, self.empresa)
 
     def todos(self):
         nome_lista_omie = "listaTabelaPreco"
@@ -207,7 +227,7 @@ class OmieListarTabelasPreco:
         self.nRegPorPagina = 20
 
     def executar(self):
-        return OmieApi().executar(self, self.empresa) 
+        return OmieApi().executar(self, self.empresa)
 
 
 class OmieApi:
@@ -247,8 +267,8 @@ class OmieApi:
             valor = antigo[atributo]
             atributo = atributo.replace("_" + classe + "__", "")
             atributo = atributo.replace("_" + classe + "_", "")
-            atributo = atributo.replace("_" + classe, "") 
-            novo[atributo] = valor     
+            atributo = atributo.replace("_" + classe, "")
+            novo[atributo] = valor
 
         return novo
 
