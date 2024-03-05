@@ -1,15 +1,22 @@
 import json
+import os
 
-from omie import *
+from dotenv import load_dotenv
 
+import omie
 
-exemplo = Omie("CAV").ListarEtapasFaturamento
+load_dotenv()
 
-exemplo.pagina = 1
-exemplo.registros_por_pagina = 25
-#exemplo.nCodPed = 1620
+empresa = "CAV"
 
-res = exemplo.executar()
+app_key = os.getenv(empresa + '_KEY')
+app_secret = os.getenv(empresa + '_SECRET')
+
+data = {
+    'pagina': 1,
+    'registros_por_pagina': 100,
+}
+res = omie.get(omie.listar_etapas_faturamento, data, app_key, app_secret)
 
 try:
     print(json.dumps(res, indent=2))

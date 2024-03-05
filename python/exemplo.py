@@ -1,18 +1,22 @@
 import json
-import sys
+import os
 
-from omie import *
+from dotenv import load_dotenv
 
+import omie
 
-exemplo = Omie("CAV").ConsultarPedido
+load_dotenv()
 
-#exemplo.nRegPorPagina = 10
-#exemplo.nPagina = 2
-#exemplo.nCodPed = 1620
+empresa = "CAV"
 
-exemplo.numero_pedido = int(sys.argv[1])
+app_key = os.getenv(empresa + '_KEY')
+app_secret = os.getenv(empresa + '_SECRET')
 
-res = exemplo.executar()
+data = {
+    "numero_pedido": 1002,
+}
+res = omie.get(omie.consultar_pedido, data, app_key, app_secret)
+
 
 try:
     codigo_pedido = res['pedido_venda_produto']['cabecalho']['codigo_pedido']
@@ -20,14 +24,16 @@ except:
     print(res)
     exit(1)
 
-print(f"O código do pedido de número {exemplo.numero_pedido} é {codigo_pedido}")
+print(f"O código do pedido de número {data['numero_pedido']} é {codigo_pedido}")
 
-consulta_pedido_etapa = Omie("CAV").ConsultarPedidoEtapas
 
-consulta_pedido_etapa.nCodPed = codigo_pedido
+data = {
+    "nCodPed": codigo_pedido,
+}
+res = omie.get(omie.listar_etapas_pedido, data, app_key, app_secret)
 
-res = consulta_pedido_etapa.executar()
 try:
+    raise
     print(json.dumps([x["cEtapa"]+","+x["dDtEtapa"] for x in res["etapasPedido"] if True or x["cEtapa"] in ("10", "20")], indent=2))
 except:
     print(res)
