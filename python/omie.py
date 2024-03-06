@@ -250,29 +250,8 @@ def get(method: str, data: dict, app_key: str, app_secret: str):
         'param': [data]
     }
     response = requests.post(f'https://app.omie.com.br/api/v1/{method_to_path.get(method)}/', json=json_data)
-    # response.raise_for_status()
     try:
         return response.json()
-    except requests.exceptions.JSONDecodeError:
+    except:
         return response.text
 
-    def __converter_json(self, metodo):
-
-        antigo = metodo.__dict__
-        classe = metodo.__class__.__name__
-        novo = {}
-
-        for atributo in antigo:
-            valor = antigo[atributo]
-            atributo = atributo.replace("_" + classe + "__", "")
-            atributo = atributo.replace("_" + classe + "_", "")
-            atributo = atributo.replace("_" + classe, "")
-            novo[atributo] = valor
-
-        return novo
-
-    def key(self): return 
-    def secret(self): return 
-    def cliente_imposto(self): return os.getenv(self.empresa + '_CLIENTE_IMPOSTO')
-    def cenario_imposto(self): return os.getenv(self.empresa + '_CENARIO_IMPOSTO')
-    def local_de_estoque(self): return os.getenv(self.empresa + '_LOCAL_DE_ESTOQUE')
